@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`preset-vinicunca > core 1`] = `
+"/* layer: default */
+.bg-red-500{--un-bg-opacity:1;background-color:rgba(239,68,68,var(--un-bg-opacity));}
+.v-button-blue-500{--un-bg-opacity:1;background-color:rgba(59,130,246,var(--un-bg-opacity));}"
+`;

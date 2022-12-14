@@ -1,17 +1,17 @@
 {
-  "name": "@vinicunca/unocss-preset-vinicunca",
+  "name": "@vinicunca/unocss-preset",
   "version": "0.0.1",
   "packageManager": "pnpm@7.18.2",
   "description": "UnoCSS custom preset",
   "author": "praburangki<https://github.com/praburangki>",
   "license": "MIT",
-  "homepage": "https://github.com/vinicunca/unocss-preset-vinicunca#readme",
+  "homepage": "https://github.com/vinicunca/unocss-preset#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vinicunca/unocss-preset-vinicunca.git"
+    "url": "git+https://github.com/vinicunca/unocss-preset.git"
   },
   "bugs": {
-    "url": "https://github.com/vinicunca/unocss-preset-vinicunca/issues"
+    "url": "https://github.com/vinicunca/unocss-preset/issues"
   },
   "keywords": [
     "unocss",
@@ -48,12 +48,14 @@
   "scripts": {
     "release": "bumpp package.json --commit --push --tag --commit 'chore: release v'",
     "build": "unbuild",
-    "dev": "unbuild --stub"
+    "dev": "unbuild --stub",
+    "test": "vitest -u"
   },
   "peerDependencies": {
     "unocss": "*"
   },
   "devDependencies": {
+    "@ctrl/tinycolor": "^3.5.0",
     "@vinicunca/eslint-config": "^1.5.0",
     "@vinicunca/js-utilities": "^2.6.2",
     "bumpp": "^8.2.1",
@@ -61,6 +63,7 @@
     "eslint-define-config": "^1.12.0",
     "typescript": "^4.9.4",
     "unbuild": "^1.0.2",
+    "unocss": "^0.47.6",
     "vitest": "^0.25.8"
   },
   "publishConfig": {
