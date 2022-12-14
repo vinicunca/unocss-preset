@@ -1,8 +1,69 @@
 {
-	"devDependencies": {
-		"@vinicunca/eslint-config": "^1.5.0",
-		"@vinicunca/js-utilities": "^2.6.2",
-		"eslint": "^8.29.0",
-		"eslint-define-config": "^1.12.0"
-	}
+  "name": "@vinicunca/unocss-preset-vinicunca",
+  "version": "0.0.1",
+  "packageManager": "pnpm@7.18.2",
+  "description": "UnoCSS custom preset",
+  "author": "praburangki<https://github.com/praburangki>",
+  "license": "MIT",
+  "homepage": "https://github.com/vinicunca/unocss-preset-vinicunca#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinicunca/unocss-preset-vinicunca.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vinicunca/unocss-preset-vinicunca/issues"
+  },
+  "keywords": [
+    "unocss",
+    "unocss-preset"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "require": "./dist/client.cjs",
+      "import": "./dist/client.mjs"
+    },
+    "./*": "./styles/*"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "client": [
+        "./dist/client.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist",
+    "styles"
+  ],
+  "scripts": {
+    "release": "bumpp package.json --commit --push --tag --commit 'chore: release v'",
+    "build": "unbuild",
+    "dev": "unbuild --stub"
+  },
+  "peerDependencies": {
+    "unocss": "*"
+  },
+  "devDependencies": {
+    "@vinicunca/eslint-config": "^1.5.0",
+    "@vinicunca/js-utilities": "^2.6.2",
+    "bumpp": "^8.2.1",
+    "eslint": "^8.29.0",
+    "eslint-define-config": "^1.12.0",
+    "typescript": "^4.9.4",
+    "unbuild": "^1.0.2",
+    "vitest": "^0.25.8"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }

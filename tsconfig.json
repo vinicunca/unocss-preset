@@ -1,17 +1,16 @@
 {
   "compilerOptions": {
-    "lib": ["esnext"],
-    "target": "ESNext",
-    "module": "ESNext",
+    "target": "es2018",
+    "module": "esnext",
+    "lib": ["esnext", "DOM"],
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
     "esModuleInterop": true,
-    "strictNullChecks": true,
     "strict": true,
-    "sourceMap": true,
-    "skipDefaultLibCheck": true,
-    "skipLibCheck": true,
-    "jsx": "preserve"
-  }
+    "strictNullChecks": true,
+    "resolveJsonModule": true
+  },
+
+  "include": ["**/*.ts"],
+
+  "exclude": ["dist"]
 }
