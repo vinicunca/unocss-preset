@@ -1,9 +1,7 @@
 import type { Preset } from '@unocss/core';
+import type { IPresetVinicunca } from './entity';
 
-// import { theme } from './theme';
-import { rules } from './rules';
-// import { shortcuts } from './shortcuts';
-// import { variants } from './variants';
+import { PresetVinicunca } from './preset';
 
 /**
  * DueCSS Preset
@@ -20,15 +18,8 @@ import { rules } from './rules';
  *   ]
  * })
  */
-export function presetVinicunca(): Preset {
-  return {
-    name: 'unocss-preset-vinicunca',
-    layers: {
-      vinicunca: -1,
-    },
-    // theme,
-    rules,
-    // shortcuts,
-    // variants,
-  };
+export function presetVinicunca(options: IPresetVinicunca = {}): Preset {
+  const preset = new PresetVinicunca(options);
+
+  return preset.getPresetConfigs();
 }

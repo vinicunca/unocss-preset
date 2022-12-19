@@ -56,8 +56,10 @@
   },
   "devDependencies": {
     "@ctrl/tinycolor": "^3.5.0",
+    "@types/apca-w3": "^0.1.0",
     "@vinicunca/eslint-config": "^1.5.0",
     "@vinicunca/js-utilities": "^2.6.2",
+    "apca-w3": "^0.1.9",
     "bumpp": "^8.2.1",
     "eslint": "^8.29.0",
     "eslint-define-config": "^1.12.0",

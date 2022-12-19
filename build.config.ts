@@ -7,4 +7,10 @@ export default defineBuildConfig({
   rollup: {
     emitCJS: true,
   },
+  failOnWarn: false,
+  externals: [
+    '@unocss/core',
+    '@unocss/preset-mini',
+    '@unocss/preset-mini/utils',
+  ],
 });

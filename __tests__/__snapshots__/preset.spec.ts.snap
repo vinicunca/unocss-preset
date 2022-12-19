@@ -1,7 +1,12 @@
 // Vitest Snapshot v1
 
 exports[`preset-vinicunca > core 1`] = `
-"/* layer: default */
-.bg-red-500{--un-bg-opacity:1;background-color:rgba(239,68,68,var(--un-bg-opacity));}
-.v-button-blue-500{--un-bg-opacity:1;background-color:rgba(59,130,246,var(--un-bg-opacity));}"
+"/* layer: vinicunca */
+.vin-button{--vin-border-color:#fff;}
+.vin-button-blue-500{--vin-border-color:#3b82f6;--un-bg-opacity:1;--vin-color:#fff;--vin-bg-color:rgba(59,130,246,var(--un-bg-opacity));--vin-hover-color:#fff;--vin-hover-bg-color:rgb(118, 168, 249);--vin-hover-border-color:rgb(118, 168, 249);--vin-active-bg-color:rgb(51, 108, 201);--vin-active-border-color:rgb(51, 108, 201);--vin-disable-color:#fff;--vin-disable-bg-color:rgb(157, 193, 251);--vin-disable-border-color:rgb(157, 193, 251);}
+.vin-button-outline-red-100{--vin-border-color:#fee2e2;--vin-color:#fee2e2;--vin-hover-color:#fff;--vin-hover-bg-color:#fee2e2;--vin-hover-border-color:#fee2e2;--vin-active-color:#fff;--vin-active-bg-color:rgb(207, 185, 185);--vin-active-border-color:rgb(207, 185, 185);--vin-disable-color:rgb(255, 241, 241);--vin-disable-border-color:rgb(255, 249, 249);}
+/* layer: default */
+.mt-4{margin-top:1rem;}
+/* layer: variants */
+.vin-button--large{--vin-height:44px;min-width:78px;padding-left:1.25rem;padding-right:1.25rem;font-size:1rem;line-height:1.5rem;}"
 `;
