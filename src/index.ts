@@ -4,7 +4,7 @@ import type { IPresetVinicunca } from './entity';
 import { PresetVinicunca } from './preset';
 
 /**
- * DueCSS Preset
+ * Vinicunca Preset
  *
  * @example
  * // unocss.config.ts

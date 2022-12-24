@@ -48,7 +48,7 @@ export class Button extends PresetPrefix {
         const parsed = parseColor(colors, theme);
 
         const css: CSSObject = {
-          [this.getVariable('border-')]: this.whiteContrast,
+          [this.getVariable('border-')]: '#000',
         };
 
         if (!parsed) {

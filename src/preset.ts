@@ -1,27 +1,33 @@
 import type { IPresetVinicunca } from './entity';
-import type { Rule, Shortcut } from '@unocss/core';
+import type { Preset, Rule, Shortcut } from '@unocss/core';
 
-import { DEFAULT_PREFIX } from './entity';
+import { Theme } from './themes';
 import { Button } from './components';
-import { PresetPrefix } from './prefix';
+import { DEFAULT_PREFIX, PresetPrefix } from './prefix';
 
 export class PresetVinicunca extends PresetPrefix {
-  options: IPresetVinicunca;
   rules: Rule[];
   shortcuts: Shortcut[];
+
+  theme: Theme;
 
   // components
   button: Button;
 
   constructor(options: IPresetVinicunca) {
-    super(options.prefix ?? DEFAULT_PREFIX);
+    const { prefix, components, theme } = options;
 
-    this.options = options;
+    super(prefix ?? DEFAULT_PREFIX);
+
+    this.theme = new Theme({
+      prefix: this.prefix,
+      ...theme,
+    });
 
     // init components
     this.button = new Button({
       prefix: this.prefix,
-      ...options.components?.button,
+      ...components?.button,
     });
 
     this.rules = this.defineRules();
@@ -32,6 +38,7 @@ export class PresetVinicunca extends PresetPrefix {
   private defineRules(): Rule[] {
     return [
       this.button.getRules(),
+      this.theme.getRules(),
     ].flat(1);
   }
 
@@ -41,7 +48,7 @@ export class PresetVinicunca extends PresetPrefix {
     ];
   }
 
-  getPresetConfigs() {
+  getPresetConfigs(): Preset {
     return {
       name: 'unocss-preset-vinicunca',
       layers: {
@@ -49,6 +56,9 @@ export class PresetVinicunca extends PresetPrefix {
         variants: 1,
       },
       prefix: this.prefix,
+      preflights: [
+        this.theme.getPreflight(),
+      ],
       rules: this.rules,
       shortcuts: this.shortcuts,
     };

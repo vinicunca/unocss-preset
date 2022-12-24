@@ -1,9 +1,10 @@
 import type { ButtonOptions } from './components';
-
-export const DEFAULT_PREFIX = 'vin-';
+import type { ThemePreset } from './themes/entity.theme';
 
 export interface IPresetVinicunca {
   prefix?: string;
+
+  theme?: ThemePreset;
 
   components?: {
     button?: ButtonOptions;

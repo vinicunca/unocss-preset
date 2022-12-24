@@ -9,6 +9,17 @@ const vinicunca = createGenerator({
       preflight: false,
     }),
     presetVinicunca({
+      prefix: 'vin-',
+      theme: {
+        preflights: {
+          'background': '#fff',
+          'on-background': '#000',
+          'surface': '#fff',
+          'on-surface': '#000',
+          'overlay-multiplier': 1,
+          'scrollbar-offset': '0px',
+        },
+      },
       components: {
         button: {
           blackContrast: '#000',
@@ -26,11 +37,12 @@ const vinicunca = createGenerator({
 });
 
 const classes = [
-  'mt-4',
-  'vin-button',
-  'vin-button--large',
-  'vin-button-blue-500',
-  'vin-button-outline-red-100',
+  // 'mt-4',
+  // 'vin-button',
+  // 'vin-button--large',
+  // 'vin-button-blue-500',
+  // 'vin-button-outline-red-100',
+  'vin-theme-light',
 ];
 
 describe('preset-vinicunca', () => {
