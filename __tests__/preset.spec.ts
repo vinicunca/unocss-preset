@@ -37,12 +37,13 @@ const vinicunca = createGenerator({
 });
 
 const classes = [
-  // 'mt-4',
-  // 'vin-button',
-  // 'vin-button--large',
-  // 'vin-button-blue-500',
-  // 'vin-button-outline-red-100',
+  'mt-4',
+  'vin-button',
+  'vin-button--large',
+  'vin-button-blue-500',
+  'vin-button-outline-red-100',
   'vin-theme-light',
+  'elevation-2',
 ];
 
 describe('preset-vinicunca', () => {

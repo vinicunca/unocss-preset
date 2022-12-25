@@ -1,6 +1,7 @@
 import type { IPresetVinicunca } from './entity';
 import type { Preset, Rule, Shortcut } from '@unocss/core';
 
+import { Elevation } from './base/elevation';
 import { Theme } from './themes';
 import { Button } from './components';
 import { DEFAULT_PREFIX, PresetPrefix } from './prefix';
@@ -10,6 +11,10 @@ export class PresetVinicunca extends PresetPrefix {
   shortcuts: Shortcut[];
 
   theme: Theme;
+
+  baseRules: string[] = ['elevation'];
+  // base
+  elevation: Elevation;
 
   // components
   button: Button;
@@ -24,6 +29,9 @@ export class PresetVinicunca extends PresetPrefix {
       ...theme,
     });
 
+    // init base
+    this.elevation = new Elevation();
+
     // init components
     this.button = new Button({
       prefix: this.prefix,
@@ -37,6 +45,7 @@ export class PresetVinicunca extends PresetPrefix {
 
   private defineRules(): Rule[] {
     return [
+      this.elevation.getRules(),
       this.button.getRules(),
       this.theme.getRules(),
     ].flat(1);
@@ -46,6 +55,17 @@ export class PresetVinicunca extends PresetPrefix {
     return [
       ...this.button.getShortcuts(),
     ];
+  }
+
+  /**
+  * This function is to avoid using the prefix for base rules
+  */
+  private getPreprocess(): Preset['preprocess'] {
+    return (matcher) => {
+      const hasBase = this.baseRules.some((rule) => matcher.includes(rule));
+
+      return hasBase ? `${this.prefix}${matcher}` : matcher;
+    };
   }
 
   getPresetConfigs(): Preset {
@@ -61,6 +81,7 @@ export class PresetVinicunca extends PresetPrefix {
       ],
       rules: this.rules,
       shortcuts: this.shortcuts,
+      preprocess: this.getPreprocess(),
     };
   }
 }
