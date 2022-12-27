@@ -12,7 +12,6 @@ export class PresetVinicunca extends PresetPrefix {
 
   theme: Theme;
 
-  baseRules: string[] = ['elevation'];
   // base
   elevation: Elevation;
 
@@ -57,17 +56,6 @@ export class PresetVinicunca extends PresetPrefix {
     ];
   }
 
-  /**
-  * This function is to avoid using the prefix for base rules
-  */
-  private getPreprocess(): Preset['preprocess'] {
-    return (matcher) => {
-      const hasBase = this.baseRules.some((rule) => matcher.includes(rule));
-
-      return hasBase ? `${this.prefix}${matcher}` : matcher;
-    };
-  }
-
   getPresetConfigs(): Preset {
     return {
       name: 'unocss-preset-vinicunca',
@@ -81,7 +69,6 @@ export class PresetVinicunca extends PresetPrefix {
       ],
       rules: this.rules,
       shortcuts: this.shortcuts,
-      preprocess: this.getPreprocess(),
     };
   }
 }

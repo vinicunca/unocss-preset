@@ -43,7 +43,8 @@ const classes = [
   'vin-button-blue-500',
   'vin-button-outline-red-100',
   'vin-theme-light',
-  'elevation-2',
+  'vin-elevation-2',
+  'hover:vin-elevation-4',
 ];
 
 describe('preset-vinicunca', () => {
