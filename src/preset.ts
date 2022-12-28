@@ -1,18 +1,20 @@
 import type { IPresetVinicunca } from './entity';
 import type { Preset, Rule, Shortcut } from '@unocss/core';
 
+import { Color } from './base/color';
 import { Elevation } from './base/elevation';
 import { Theme } from './themes';
 import { Button } from './components';
-import { DEFAULT_PREFIX, PresetPrefix } from './prefix';
+import { DEFAULT_PREFIX, PresetCore } from './core';
 
-export class PresetVinicunca extends PresetPrefix {
+export class PresetVinicunca extends PresetCore {
   rules: Rule[];
   shortcuts: Shortcut[];
 
   theme: Theme;
 
   // base
+  color: Color;
   elevation: Elevation;
 
   // components
@@ -29,6 +31,10 @@ export class PresetVinicunca extends PresetPrefix {
     });
 
     // init base
+    this.color = new Color({
+      prefix: this.prefix,
+      colorKeys: this.theme.getColorKeys(),
+    });
     this.elevation = new Elevation();
 
     // init components
@@ -44,6 +50,7 @@ export class PresetVinicunca extends PresetPrefix {
 
   private defineRules(): Rule[] {
     return [
+      this.color.getRules(),
       this.elevation.getRules(),
       this.button.getRules(),
       this.theme.getRules(),
@@ -60,7 +67,9 @@ export class PresetVinicunca extends PresetPrefix {
     return {
       name: 'unocss-preset-vinicunca',
       layers: {
-        vinicunca: -1,
+        vinicunca: -2,
+        preflight: -1,
+        default: 0,
         variants: 1,
       },
       prefix: this.prefix,

@@ -1,11 +1,11 @@
 import type { CSSObject, ParsedColorValue, Rule, Shortcut, VariantMatchedResult } from '@unocss/core';
-import type { PrefixOptions } from '../prefix';
+import type { CoreOptions } from '../core';
 
 import { TinyColor } from '@ctrl/tinycolor';
-import { colorOpacityToString, colorToString, parseColor } from '@unocss/preset-mini/utils';
+import { colorOpacityToString, colorToString, handler, parseColor } from '@unocss/preset-mini/utils';
 import { calcAPCA } from 'apca-w3';
 
-import { PresetPrefix } from '../prefix';
+import { PresetCore } from '../core';
 
 export const DEFAULT_WHITE_CONTRAST = '#fff';
 export const DEFAULT_BLACK_CONTRAST = '#000';
@@ -16,12 +16,12 @@ export interface ButtonOptions {
   sizes?: Record<string, string>;
 }
 
-export class Button extends PresetPrefix {
+export class Button extends PresetCore {
   private whiteContrast: string;
   private blackContrast: string;
   private sizes: Record<string, string>;
 
-  constructor(options: ButtonOptions & PrefixOptions) {
+  constructor(options: ButtonOptions & CoreOptions) {
     super(options.prefix);
     this.prefix = options.prefix;
 
@@ -116,14 +116,22 @@ export class Button extends PresetPrefix {
 
   private getSizesShortcut(): Shortcut {
     return [
-      new RegExp(`^button--(?<size>${Object.keys(this.sizes).join('|')})$`),
-      ({ groups }) => {
-        if (groups?.size) {
-          return this.sizes[groups.size];
-        }
+      /^button-?(.*)$/,
+      ([, body]) => {
+        const itu = handler.bracket(body);
+        console.log('🚀 ~ Button ~ getSizesShortcut ~ itu', itu);
 
+        const splitted = itu?.split('--');
+        console.log('🚀 ~ Button ~ getSizesShortcut ~ splitted', splitted);
+        // const size = groups?.size || 'DEFAULT';
+        // return this.sizes[size] ?? '';
         return '';
       },
+      // new RegExp(`^button(?:--)?(?<size>${Object.keys(this.sizes).join('|')})?$`),
+      // ({ groups }) => {
+      //   const size = groups?.size || 'DEFAULT';
+      //   return this.sizes[size] ?? '';
+      // },
       { layer: 'variants' },
     ];
   }

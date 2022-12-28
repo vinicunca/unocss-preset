@@ -68,6 +68,7 @@ export class Elevation {
           'box-shadow': 'var(--un-ring-offset-shadow), var(--un-ring-shadow), var(--un-shadow)',
         };
       },
+      { layer: 'vinicunca' },
     ];
   }
 }

@@ -1,21 +1,22 @@
 import type { InternalThemeDefinition, InternalThemeOptions, ThemeOptions, ThemePreflight, ThemePreset } from './entity.theme';
 import type { DeepPartial, Preflight, Rule } from '@unocss/core';
-import type { PrefixOptions } from '../prefix';
+import type { CoreOptions } from '../core';
 
 import { entriesToCss } from '@unocss/core';
 import { mergeDeep } from '@vinicunca/js-utilities';
 
 import { DEFAULT_THEME } from './entity.theme';
-import { PresetPrefix } from '../prefix';
+import { PresetCore } from '../core';
 import { createCssSelector } from '../utils/css';
 import { colorToInt, generateRGBs } from '../utils/colors';
 import { APCAcontrast } from '../utils/apca';
 
-export class Theme extends PresetPrefix {
+export class Theme extends PresetCore {
   themes: InternalThemeOptions;
   preflights: DeepPartial<ThemePreflight>;
+  colorKeys: string[] = [];
 
-  constructor(options: ThemePreset & PrefixOptions) {
+  constructor(options: ThemePreset & CoreOptions) {
     super(options.prefix);
 
     const parsedOptions = this.parseThemeOptions(options?.themes);
@@ -47,6 +48,10 @@ export class Theme extends PresetPrefix {
     ];
   }
 
+  getColorKeys() {
+    return Array.from(new Set(this.colorKeys));
+  }
+
   private parseThemeOptions(options?: ThemeOptions): InternalThemeOptions {
     if (!options) {
       return DEFAULT_THEME as InternalThemeOptions;
@@ -70,6 +75,10 @@ export class Theme extends PresetPrefix {
       };
 
       for (const color of Object.keys(theme.colors)) {
+        if (/^on-[a-z]/.test(color) || theme.colors[`on-${color}`]) {
+          continue;
+        }
+
         const onColor = `on-${color}`;
         const colorValue = colorToInt(theme.colors[color]);
 
@@ -77,6 +86,8 @@ export class Theme extends PresetPrefix {
         const whiteContrast = Math.abs(APCAcontrast(0xFFFFFF, colorValue));
         // Prefer white text if both have an acceptable contrast ratio
         theme.colors[onColor] = whiteContrast > Math.min(blackContrast, 50) ? '#fff' : '#000';
+
+        this.colorKeys.push(color);
       }
     }
 
@@ -103,6 +114,7 @@ export class Theme extends PresetPrefix {
           ...this.remapVariables({ tokens: themeName.variables }),
         };
       },
+      { layer: 'vinicunca' },
     ];
   }
 }
