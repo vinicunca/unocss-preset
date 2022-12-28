@@ -1,12 +1,12 @@
 import { toKebabCase } from '@vinicunca/js-utilities';
 
-export interface PrefixOptions {
+export interface CoreOptions {
   prefix: string;
 }
 
 export const DEFAULT_PREFIX = 'vin-';
 
-export class PresetPrefix {
+export class PresetCore {
   prefix: string;
 
   constructor(prefix: string) {
@@ -19,7 +19,7 @@ export class PresetPrefix {
 
   remapVariables({ tokens, key = '' }: { tokens: Record<string, string | number>; key?: string }) {
     return Object.keys(tokens).reduce<any>((prev, acc) => {
-      const _key = `--${this.prefix}${key}${toKebabCase(acc)}`;
+      const _key = `${this.genVariable(key)}${toKebabCase(acc)}`;
       prev[_key] = tokens[acc];
       return prev;
     }, {});
