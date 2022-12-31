@@ -1,156 +1,94 @@
-import type { CSSObject, ParsedColorValue, Rule, Shortcut, VariantMatchedResult } from '@unocss/core';
+import type { Rule, Shortcut } from '@unocss/core';
 import type { CoreOptions } from '../core';
-
-import { TinyColor } from '@ctrl/tinycolor';
-import { colorOpacityToString, colorToString, handler, parseColor } from '@unocss/preset-mini/utils';
-import { calcAPCA } from 'apca-w3';
 
 import { PresetCore } from '../core';
 
-export const DEFAULT_WHITE_CONTRAST = '#fff';
-export const DEFAULT_BLACK_CONTRAST = '#000';
-
 export interface ButtonOptions {
-  blackContrast?: string;
-  whiteContrast?: string;
   sizes?: Record<string, string>;
+  variants?: Record<string, string>;
 }
 
 export class Button extends PresetCore {
-  private whiteContrast: string;
-  private blackContrast: string;
-  private sizes: Record<string, string>;
+  sizes: Record<string, string>;
+  variants: Record<string, string>;
 
   constructor(options: ButtonOptions & CoreOptions) {
-    super(options.prefix);
-    this.prefix = options.prefix;
+    super(options);
 
-    this.whiteContrast = options.whiteContrast ?? DEFAULT_WHITE_CONTRAST;
-    this.blackContrast = options.blackContrast ?? DEFAULT_BLACK_CONTRAST;
     this.sizes = options.sizes ?? {};
+    this.variants = options.variants ?? {};
+  }
+
+  transformClass(content: string): string {
+    const reSize = new RegExp(`(${Object.keys(this.sizes).join('|')})`);
+
+    return content.replace(
+      new RegExp(`(${this.prefix}button)(?:--\\[((?:[\\w\\s-])+?)\\])`, 'gm'),
+      (_from, pre: string, props = '') => {
+        const results: string[] = [];
+
+        const [size] = props.match(reSize) ?? [];
+        const [variant] = props.match(/outline|text|circle/) ?? [];
+        const [, color] = props.match(/brand-(\w+)/) ?? [];
+
+        results.push(pre + `--size-${size ?? 'default'}`);
+
+        const variants = variant ?? 'default';
+        results.push(pre + `--variant-${variants}`);
+
+        const hasVariants = variants !== 'default';
+
+        if (color) {
+          if (hasVariants) {
+            results.push(`${this.prefix}text-${color}`);
+            results.push(`hover:${this.prefix}text-on-${color}`);
+            results.push(`hover:before:${this.prefix}bg-${color}`);
+          } else {
+            results.push(`${this.prefix}bg-${color}`);
+          }
+        } else if (hasVariants) {
+          results.push(`hover:${this.prefix}text-on-invert`);
+          results.push(`hover:before:${this.prefix}bg-invert`);
+        }
+
+        return results.join(' ');
+      },
+    );
   }
 
   getRules(): Rule[] {
     return [
-      this.getColorsRule(),
-    ];
-  }
-
-  private getVariable(key = '') {
-    return `--${this.prefix}${key}color`;
-  }
-
-  private getColorsRule(): Rule {
-    return [
-      /^button(?:-(?<variants>(?:outline|plain)))?(?:-(?<colors>.+))?$/,
-      ({ groups }, { theme, variantMatch }) => {
-        const { colors = '', variants } = groups!;
-        const parsed = parseColor(colors, theme);
-
-        const css: CSSObject = {
-          [this.getVariable('border-')]: '#000',
-        };
-
-        if (!parsed) {
-          return css;
-        }
-
-        const { color, cssColor } = parsed;
-
-        if (cssColor) {
-          const isDark = this.hasDark(variantMatch);
-          const tinyColor = new TinyColor(color);
-
-          const activeBgColor = isDark
-            ? tinyColor.tint(20).toString()
-            : this.darken(tinyColor, 20);
-
-          if (variants === 'outline') {
-            css[this.getVariable()] = color;
-            css[this.getVariable('border-')] = color;
-            css[this.getVariable('hover-')] = '#fff';
-            css[this.getVariable('hover-bg-')] = color;
-            css[this.getVariable('hover-border-')] = color;
-            css[this.getVariable('active-')] = '#fff';
-            css[this.getVariable('active-bg-')] = activeBgColor;
-            css[this.getVariable('active-border-')] = activeBgColor;
-            css[this.getVariable('disable-')] = tinyColor.tint(50).toString();
-            css[this.getVariable('disable-border-')] = tinyColor.tint(80).toString();
-          } else {
-            const hoverBgColor = isDark
-              ? this.darken(tinyColor, 30)
-              : tinyColor.tint(30).toString();
-
-            const disabledColor = isDark
-              ? this.darken(tinyColor, 50)
-              : tinyColor.tint(50).toString();
-
-            const textColor = this.getTextColor(parsed);
-
-            css['--un-bg-opacity'] = colorOpacityToString(cssColor);
-            css[this.getVariable()] = textColor;
-            css[this.getVariable('bg-')] = colorToString(cssColor, 'var(--un-bg-opacity)');
-            css[this.getVariable('border-')] = color;
-            css[this.getVariable('hover-')] = '#fff';
-            css[this.getVariable('hover-bg-')] = hoverBgColor;
-            css[this.getVariable('hover-border-')] = hoverBgColor;
-            css[this.getVariable('active-bg-')] = activeBgColor;
-            css[this.getVariable('active-border-')] = activeBgColor;
-            css[this.getVariable('disable-')] = textColor;
-            css[this.getVariable('disable-bg-')] = disabledColor;
-            css[this.getVariable('disable-border-')] = disabledColor;
-          }
-        }
-
-        return css;
-      },
-      { layer: 'vinicunca' },
     ];
   }
 
   getShortcuts(): Shortcut[] {
     return [
-      this.getSizesShortcut(),
+      [
+        /^button$/,
+        () => {
+          const size = this.sizes.default ?? '';
+          const variant = this.variants.default ?? '';
+
+          return `${size} ${variant}`;
+        },
+        { layer: 'vinicunca' },
+      ],
+      [
+        new RegExp(`^button--size-(?<size>${Object.keys(this.sizes).join('|')})?$`),
+        ({ groups }) => {
+          const size = groups?.size || 'default';
+          return this.sizes[size] ?? '';
+        },
+        { layer: 'vinicunca' },
+      ],
+      [
+        new RegExp(`^button--variant-(?<variant>${Object.keys(this.variants).join('|')})?$`),
+        ({ groups }) => {
+          const variant = groups?.variant || 'elevated';
+          return this.variants[variant] ?? '';
+        },
+        { layer: 'variants' },
+      ],
     ];
-  }
-
-  private getSizesShortcut(): Shortcut {
-    return [
-      /^button-?(.*)$/,
-      ([, body]) => {
-        const itu = handler.bracket(body);
-        console.log('🚀 ~ Button ~ getSizesShortcut ~ itu', itu);
-
-        const splitted = itu?.split('--');
-        console.log('🚀 ~ Button ~ getSizesShortcut ~ splitted', splitted);
-        // const size = groups?.size || 'DEFAULT';
-        // return this.sizes[size] ?? '';
-        return '';
-      },
-      // new RegExp(`^button(?:--)?(?<size>${Object.keys(this.sizes).join('|')})?$`),
-      // ({ groups }) => {
-      //   const size = groups?.size || 'DEFAULT';
-      //   return this.sizes[size] ?? '';
-      // },
-      { layer: 'variants' },
-    ];
-  }
-
-  private darken(color: TinyColor, amount = 20) {
-    return color.mix('#141414', amount).toString();
-  }
-
-  private getTextColor(parsed: ParsedColorValue) {
-    const colorValue = colorToString(parsed.cssColor!, parsed.alpha ?? 1);
-    const blackContrast = Math.abs(calcAPCA(0, colorValue) as number);
-    const whiteContrast = Math.abs(calcAPCA(0xFFFFFF, colorValue) as number);
-
-    return whiteContrast > Math.min(blackContrast, 50) ? this.whiteContrast : this.blackContrast;
-  }
-
-  private hasDark(variantMatch: VariantMatchedResult) {
-    const [,,, matches] = variantMatch;
-    const [variant] = matches;
-    return variant?.name === 'dark';
   }
 }

@@ -1,25 +1,27 @@
-import type { Preset } from '@unocss/core';
-import type { IPresetVinicunca } from './entity';
+import type { IConfigVinicunca } from './entity';
 
-import { PresetVinicunca } from './preset';
+import { VincuncaConfig } from './config';
 
 /**
- * Vinicunca Preset
+ * Vinicunca Config
  *
  * @example
  * // unocss.config.ts
  * import { presetUno } from 'unocss'
- * import { presetVinicunca } from '@vinicunca/unocss-preset'
+ * import { defineVinicuncaConfig } from '@vinicunca/unocss-preset'
  *
+ * const config = defineVinicuncaConfig()
  * export default defineConfig({
  *   presets: [
  *     presetUno(),
- *     presetVinicunca()
- *   ]
+ *     config.getPreset(),
+ *   ],
+ *
+ *  transformers: [
+ *   config.getTransformer()
+ *  ]
  * })
  */
-export function presetVinicunca(options: IPresetVinicunca = {}): Preset {
-  const preset = new PresetVinicunca(options);
-
-  return preset.getPresetConfigs();
+export function defineVinicuncaConfig(options: IConfigVinicunca = {}) {
+  return new VincuncaConfig(options);
 }

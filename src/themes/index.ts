@@ -14,10 +14,9 @@ import { APCAcontrast } from '../utils/apca';
 export class Theme extends PresetCore {
   themes: InternalThemeOptions;
   preflights: DeepPartial<ThemePreflight>;
-  colorKeys: string[] = [];
 
   constructor(options: ThemePreset & CoreOptions) {
-    super(options.prefix);
+    super(options);
 
     const parsedOptions = this.parseThemeOptions(options?.themes);
     this.themes = this.parseTheme(parsedOptions);
@@ -46,10 +45,6 @@ export class Theme extends PresetCore {
     return [
       this.getVariablesRule(),
     ];
-  }
-
-  getColorKeys() {
-    return Array.from(new Set(this.colorKeys));
   }
 
   private parseThemeOptions(options?: ThemeOptions): InternalThemeOptions {

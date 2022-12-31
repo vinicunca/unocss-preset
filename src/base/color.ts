@@ -3,16 +3,9 @@ import type { CoreOptions } from '../core';
 
 import { PresetCore } from '../core';
 
-interface ColorOptions {
-  colorKeys: string[];
-}
-
 export class Color extends PresetCore {
-  colorKeys: string[];
-
-  constructor(options: ColorOptions & CoreOptions) {
-    super(options.prefix);
-    this.colorKeys = options.colorKeys;
+  constructor(options: CoreOptions) {
+    super(options);
   }
 
   getRules(): Rule[] {
@@ -24,13 +17,16 @@ export class Color extends PresetCore {
 
   private getTextRule(): Rule {
     return [
-      /^text-(.+)$/,
-      ([, body]) => {
-        if (!this.colorKeys.includes(body)) {
+      /^text-(?<body>(?:on-)?(?<color>.+))/,
+      ({ groups }) => {
+        const { body, color } = groups!;
+
+        if (!this.getColorKeys().includes(color)) {
           return;
         }
 
-        const colorVar = this.genVariable(`theme-${body}`);
+        const colorBody = /^on-[a-z]/.test(body) ? `on-${color}` : color;
+        const colorVar = this.genVariable(`theme-${colorBody}`);
 
         return {
           '--un-color-opacity': 1,

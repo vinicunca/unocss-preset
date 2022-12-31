@@ -16,6 +16,7 @@ module.exports = defineConfig({
     'no-restricted-syntax': 'off',
     'no-void': 'off',
     'vue/one-component-per-file': 'off',
+    'prefer-template': 'off',
   },
 
   overrides: [

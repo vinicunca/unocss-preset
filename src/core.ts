@@ -1,16 +1,19 @@
 import { toKebabCase } from '@vinicunca/js-utilities';
 
 export interface CoreOptions {
-  prefix: string;
+  prefix?: string;
+  colorKeys?: string[];
 }
 
 export const DEFAULT_PREFIX = 'vin-';
 
 export class PresetCore {
   prefix: string;
+  colorKeys: string[];
 
-  constructor(prefix: string) {
-    this.prefix = prefix;
+  constructor(options: CoreOptions) {
+    this.prefix = options.prefix ?? '';
+    this.colorKeys = options.colorKeys ?? [];
   }
 
   genVariable(key = '') {
@@ -23,5 +26,9 @@ export class PresetCore {
       prev[_key] = tokens[acc];
       return prev;
     }, {});
+  }
+
+  getColorKeys() {
+    return Array.from(new Set(this.colorKeys));
   }
 }
